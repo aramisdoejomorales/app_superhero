@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:superhero_app/screens/superhero_search_scr.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,7 +13,7 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Super Hero App',
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+      home: SuperheroSearchScr(),
     );
   }
 }
