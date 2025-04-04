@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../data/model/superhero_response.dart';
+import '../data/repository.dart';
+
 class SuperheroSearchScr extends StatefulWidget {
   const SuperheroSearchScr({super.key});
 
@@ -8,6 +11,9 @@ class SuperheroSearchScr extends StatefulWidget {
 }
 
 class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
+  Future<SuperheroResponse?>? _superheroInfo;
+  Repository repository = Repository();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +32,25 @@ class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
                 ),
               ),
               onChanged: (value) {
-                // Handle search input
+                setState(() {
+                  _superheroInfo = repository.fetchSuperhero(value);
+                });
               },
             ),
+          ),
+          FutureBuilder(
+            future: _superheroInfo,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data!.response);
+              } else if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else {
+                return Text('No data');
+              }
+            },
           ),
         ],
       ),
