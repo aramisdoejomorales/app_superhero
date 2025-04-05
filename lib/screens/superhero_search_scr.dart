@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:superhero_app/data/model/superhero_detail_response.dart';
 
 import '../data/model/superhero_response.dart';
 import '../data/repository.dart';
@@ -28,7 +29,7 @@ class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue, width: 4.0),
+                  borderSide: BorderSide(color: Colors.redAccent, width: 4.0),
                 ),
               ),
               onChanged: (value) {
@@ -38,22 +39,40 @@ class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
               },
             ),
           ),
-          FutureBuilder(
-            future: _superheroInfo,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.response);
-              } else if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else {
-                return Text('No data');
-              }
-            },
-          ),
+          bodyList(),
         ],
       ),
     );
   }
+
+  FutureBuilder<SuperheroResponse?> bodyList() {
+    return FutureBuilder(
+      future: _superheroInfo,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var superheroList = snapshot.data?.results;
+          return Expanded(
+            child: ListView.builder(
+              itemCount: superheroList?.length ?? 0,
+              itemBuilder: (context, index) {
+                if (superheroList != null) {
+                  return itemSuperhero(superheroList[index]);
+                } else {
+                  return Text('No data');
+                }
+              },
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text(snapshot.error.toString());
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else {
+          return Text('No data');
+        }
+      },
+    );
+  }
+
+  Column itemSuperhero(SuperheroDetailResponse item) => Column();
 }
