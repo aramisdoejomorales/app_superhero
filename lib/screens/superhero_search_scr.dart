@@ -13,7 +13,8 @@ class SuperheroSearchScr extends StatefulWidget {
 
 class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
   Future<SuperheroResponse?>? _superheroInfo;
-  Repository repository = Repository();
+  final Repository _repository = Repository();
+  bool _isTextEmpty = true;
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +35,25 @@ class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
               ),
               onChanged: (value) {
                 setState(() {
-                  _superheroInfo = repository.fetchSuperhero(value);
+                  _isTextEmpty = value.isEmpty;
+                  _superheroInfo = _repository.fetchSuperhero(value);
                 });
               },
             ),
           ),
-          bodyList(),
+          bodyList(_isTextEmpty),
         ],
       ),
     );
   }
 
-  FutureBuilder<SuperheroResponse?> bodyList() {
+  FutureBuilder<SuperheroResponse?> bodyList(bool isTextEmpty) {
     return FutureBuilder(
       future: _superheroInfo,
       builder: (context, snapshot) {
+        if (isTextEmpty) {
+          return Center(child: Text('Introduzca un nombre de superhéroe'));
+        }
         if (snapshot.hasData) {
           var superheroList = snapshot.data?.results;
           return Expanded(
@@ -81,22 +86,27 @@ class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
         borderRadius: BorderRadius.circular(15),
         color: Colors.red,
       ),
-
       child: Column(
         children: [
-          Image.network(
-            item.url,
-            height: 250,
-            width: double.infinity,
-            fit: BoxFit.cover,
-            alignment: Alignment(0.0, -0.5),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.network(
+              item.url,
+              height: 250,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              alignment: Alignment(0.0, -0.5),
+            ),
           ),
-          Text(
-            item.name,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              item.name,
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w300,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
