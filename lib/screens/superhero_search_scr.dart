@@ -74,5 +74,33 @@ class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
     );
   }
 
-  Column itemSuperhero(SuperheroDetailResponse item) => Column();
+  Padding itemSuperhero(SuperheroDetailResponse item) => Padding(
+    padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.red,
+      ),
+
+      child: Column(
+        children: [
+          Image.network(
+            item.url,
+            height: 250,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            alignment: Alignment(0.0, -0.5),
+          ),
+          Text(
+            item.name,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
