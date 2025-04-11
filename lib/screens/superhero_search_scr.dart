@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:superhero_app/data/model/superhero_detail_response.dart';
+import 'package:superhero_app/screens/superhero_detail_scr.dart';
 
 import '../data/model/superhero_response.dart';
 import '../data/repository.dart';
@@ -81,35 +82,44 @@ class _SuperheroSearchScrState extends State<SuperheroSearchScr> {
 
   Padding itemSuperhero(SuperheroDetailResponse item) => Padding(
     padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.red,
-      ),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(
-              item.url,
-              height: 250,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              alignment: Alignment(0.0, -0.5),
+    child: GestureDetector(
+      onTap:
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SuperheroDetailScr(superhero: item),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              item.name,
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w300,
-                color: Colors.white,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.red,
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                item.url,
+                height: 250,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                alignment: Alignment(0.0, -0.5),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                item.name,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );
